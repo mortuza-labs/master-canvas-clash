@@ -245,7 +245,7 @@ export class MasterGame {
     const pw = this.paddleWidth();
     this.paddle.x += (this.targetX - this.paddle.x) * Math.min(1, dt * 0.028);
     this.paddle.x = Math.max(pw / 2, Math.min(this.w - pw / 2, this.paddle.x));
-    const py = this.h - this.h * 0.075;
+    const py = this.paddleY();
 
     if (this.comboTimer > 0) {
       this.comboTimer -= dt;
@@ -357,6 +357,12 @@ export class MasterGame {
     return this.paddle.w * ((this.timers.expand ?? 0) > 0 ? 1.65 : 1);
   }
 
+  private paddleY() {
+    const isMobile = this.w <= 640 || this.h > this.w;
+    return this.h - this.h * (isMobile ? 0.16 : 0.075);
+  }
+
+
   private hitBrick(br: Brick, b: Ball) {
     if (br.max === 4) {
       audio.play("hit");
@@ -427,7 +433,7 @@ export class MasterGame {
     } else {
       this.timers[kind] = POWER_DURATION;
     }
-    this.burst(this.paddle.x, this.h - this.h * 0.075, 20, POWER_META[kind].color);
+    this.burst(this.paddle.x, this.paddleY(), 20, POWER_META[kind].color);
     this.emit();
   }
 
@@ -576,7 +582,7 @@ export class MasterGame {
 
     // paddle
     const pw = this.paddleWidth();
-    const py = this.h - this.h * 0.075;
+    const py = this.paddleY();
     g.save();
     const pg = g.createLinearGradient(this.paddle.x - pw / 2, 0, this.paddle.x + pw / 2, 0);
     pg.addColorStop(0, "oklch(0.75 0.17 200)");
