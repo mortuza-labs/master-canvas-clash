@@ -142,11 +142,11 @@ export class MasterGame {
       this.bricks = [];
       return;
     }
-    const pad = this.w * 0.03;
+    const pad = this.w * 0.025;
     const top = this.h * 0.12;
-    const gap = Math.max(3, this.w * 0.006);
+    const gap = Math.max(3, this.w * 0.005);
     const bw = (this.w - pad * 2 - gap * (COLS - 1)) / COLS;
-    const bh = Math.max(14, Math.min(this.h * 0.035, bw * 0.5));
+    const bh = Math.max(16, Math.min(this.h * 0.038, bw * 0.55));
     const prev = this.bricks;
     this.bricks = [];
     let i = 0;
@@ -359,7 +359,7 @@ export class MasterGame {
 
   private paddleY() {
     const isMobile = this.w <= 640 || this.h > this.w;
-    return this.h - this.h * (isMobile ? 0.16 : 0.075);
+    return this.h - this.h * (isMobile ? 0.2 : 0.075);
   }
 
 
