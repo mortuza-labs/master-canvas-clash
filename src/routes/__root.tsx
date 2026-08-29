@@ -11,6 +11,8 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { registerAppServiceWorker } from "../lib/register-sw";
+
 
 function NotFoundComponent() {
   return (
@@ -138,6 +140,12 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    registerAppServiceWorker();
+  }, []);
+
+
 
   return (
     <QueryClientProvider client={queryClient}>
