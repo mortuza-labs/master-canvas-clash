@@ -118,7 +118,7 @@ export class MasterGame {
 
   private grid(level: number): Grid {
     if (this.mode === "classic" || this.mode === "challenge") {
-      return LEVELS[(level - 1) % LEVELS.length];
+      return LEVELS[(level - 1) % LEVELS.length]!;
     }
     return endlessGrid(level);
   }
@@ -360,7 +360,7 @@ export class MasterGame {
   private hitBrick(br: Brick, b: Ball) {
     if (br.max === 4) {
       audio.play("hit");
-      this.burst(b.x, b.y, 6, BRICK_COLORS[4]);
+      this.burst(b.x, b.y, 6, BRICK_COLORS[4]!);
       return;
     }
     const powerful = (this.timers.power ?? 0) > 0;
@@ -368,7 +368,7 @@ export class MasterGame {
     this.shake = Math.min(8, this.shake + 2);
     if (br.hits > 0) {
       audio.play("hit");
-      this.burst(b.x, b.y, 6, BRICK_COLORS[Math.min(br.hits, 3)]);
+      this.burst(b.x, b.y, 6, BRICK_COLORS[Math.min(br.hits, 3)]!);
       this.score += 5;
     } else {
       br.alive = false;
@@ -376,7 +376,7 @@ export class MasterGame {
       this.combo = Math.min(this.combo + 1, 12);
       this.comboTimer = 1600;
       this.score += (30 + br.max * 20) * (1 + this.combo * 0.15);
-      this.burst(br.x + br.w / 2, br.y + br.h / 2, 18, BRICK_COLORS[Math.min(br.max, 3)]);
+      this.burst(br.x + br.w / 2, br.y + br.h / 2, 18, BRICK_COLORS[Math.min(br.max, 3)]!);
       this.ev.onAchievement("first-blood");
       if (this.score >= 5000) this.ev.onAchievement("score-5000");
       if (this.mode === "endless" && this.score >= 1000) this.ev.onAchievement("endless-1000");
@@ -397,7 +397,7 @@ export class MasterGame {
 
   private spawnDrop(x: number, y: number) {
     const kinds: PowerKind[] = ["expand", "multi", "slow", "power", "expand", "multi", "life"];
-    const kind = kinds[Math.floor(Math.random() * kinds.length)];
+    const kind = kinds[Math.floor(Math.random() * kinds.length)]!;
     this.drops.push({ x, y, vy: 0.22 * (this.h / 700), kind });
   }
 
@@ -523,7 +523,7 @@ export class MasterGame {
     // bricks
     for (const b of this.bricks) {
       if (!b.alive) continue;
-      const color = BRICK_COLORS[Math.min(b.hits, 4)] || BRICK_COLORS[1];
+      const color = BRICK_COLORS[Math.min(b.hits, 4)] || BRICK_COLORS[1]!;
       g.save();
       g.shadowColor = color;
       g.shadowBlur = 14;

@@ -57,7 +57,7 @@ export const audio = {
       const o = c.createOscillator();
       const g = c.createGain();
       o.type = "sine";
-      o.frequency.value = notes[i % notes.length];
+      o.frequency.value = notes[i % notes.length]!;
       g.gain.setValueAtTime(0.0001, t);
       g.gain.linearRampToValueAtTime(1, t + 0.08);
       g.gain.exponentialRampToValueAtTime(0.0001, t + 0.7);
@@ -67,7 +67,7 @@ export const audio = {
       const o2 = c.createOscillator();
       const g2 = c.createGain();
       o2.type = "triangle";
-      o2.frequency.value = notes[(i + 2) % notes.length] * 2;
+      o2.frequency.value = notes[(i + 2) % notes.length]! * 2;
       g2.gain.setValueAtTime(0.0001, t);
       g2.gain.linearRampToValueAtTime(0.35, t + 0.05);
       g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
