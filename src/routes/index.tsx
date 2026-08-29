@@ -1,24 +1,29 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { GameShell } from "@/components/game/GameShell";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "MASTER — Break. Conquer. Master." },
+      {
+        name: "description",
+        content:
+          "MASTER is a premium offline arcade brick-breaker: smooth physics, power-ups, three game modes, achievements and installable PWA play.",
+      },
+      { property: "og:title", content: "MASTER — Break. Conquer. Master." },
+      {
+        property: "og:description",
+        content:
+          "Premium arcade brick-breaker with Classic, Endless and Challenge modes. Plays fully offline, installable on mobile and desktop.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "theme-color", content: "#080b14" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+  return <GameShell />;
 }
