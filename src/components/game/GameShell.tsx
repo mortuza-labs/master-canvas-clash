@@ -488,9 +488,9 @@ function HomeScreen({
   onToggleMusic: () => void;
 }) {
   return (
-    <div className="flex w-full max-w-md flex-col items-center text-center">
-      <div className="animate-float">
-        <h1 className="animate-logo font-display text-6xl font-black uppercase tracking-[0.18em] text-primary sm:text-7xl">
+    <div className="flex w-full max-w-md flex-col items-center px-4 text-center">
+      <div className="animate-float w-full max-w-full">
+        <h1 className="animate-logo w-full max-w-full whitespace-nowrap text-center font-display font-black uppercase tracking-[0.18em] text-primary [font-size:clamp(2.25rem,13vw,4.5rem)]">
           MASTER
         </h1>
       </div>
