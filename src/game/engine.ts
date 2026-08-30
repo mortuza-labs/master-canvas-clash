@@ -369,19 +369,23 @@ export class MasterGame {
       this.burst(b.x, b.y, 6, BRICK_COLORS[4]!);
       return;
     }
+    if (!br.alive) return;
     const powerful = (this.timers.power ?? 0) > 0;
     br.hits -= powerful ? 3 : 1;
     this.shake = Math.min(8, this.shake + 2);
     if (br.hits > 0) {
       audio.play("hit");
       this.burst(b.x, b.y, 6, BRICK_COLORS[Math.min(br.hits, 3)]!);
-      this.score += 5;
+      this.score += 1;
     } else {
       br.alive = false;
+      br.hits = 0;
       audio.play("break");
       this.combo = Math.min(this.combo + 1, 12);
       this.comboTimer = 1600;
-      this.score += (30 + br.max * 20) * (1 + this.combo * 0.15);
+      // fixed, balanced award — once per destroyed brick, small combo bonus
+      const base = br.max >= 3 ? 25 : br.max === 2 ? 15 : 10;
+      this.score += base + Math.min(this.combo, 8) * 2;
       this.burst(br.x + br.w / 2, br.y + br.h / 2, 18, BRICK_COLORS[Math.min(br.max, 3)]!);
       this.ev.onAchievement("first-blood");
       if (this.score >= 5000) this.ev.onAchievement("score-5000");
