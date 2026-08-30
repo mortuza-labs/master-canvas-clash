@@ -208,16 +208,17 @@ export class MasterGame {
     cancelAnimationFrame(this.raf);
   }
 
+  private lastHudKey = "";
+
   private emit() {
-    this.ev.onHud({
-      score: Math.round(this.score),
-      lives: this.lives,
-      level: this.level,
-      combo: this.combo,
-      active: (Object.keys(this.timers) as PowerKind[])
-        .filter((k) => (this.timers[k] ?? 0) > 0)
-        .map((k) => ({ kind: k, left: this.timers[k] ?? 0 })),
-    });
+    const active = (Object.keys(this.timers) as PowerKind[])
+      .filter((k) => (this.timers[k] ?? 0) > 0)
+      .map((k) => ({ kind: k, left: this.timers[k] ?? 0 }));
+    const score = Math.round(this.score);
+    const key = `${score}|${this.lives}|${this.level}|${this.combo}|${active.map((a) => a.kind).join(",")}`;
+    if (key === this.lastHudKey) return;
+    this.lastHudKey = key;
+    this.ev.onHud({ score, lives: this.lives, level: this.level, combo: this.combo, active });
   }
 
   /* ---------- loop ---------- */
