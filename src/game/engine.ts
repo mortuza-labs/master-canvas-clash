@@ -112,8 +112,8 @@ export class MasterGame {
   }
 
   private baseSpeed() {
-    const base = this.mode === "challenge" ? 0.62 : this.mode === "endless" ? 0.5 : 0.46;
-    return (base + Math.min(this.level, 20) * 0.022) * (this.h / 700) * 1.05;
+    const base = this.mode === "challenge" ? 0.74 : this.mode === "endless" ? 0.6 : 0.56;
+    return (base + Math.min(this.level, 20) * 0.024) * (this.h / 700) * 1.05;
   }
 
   private grid(level: number): Grid {
@@ -208,16 +208,17 @@ export class MasterGame {
     cancelAnimationFrame(this.raf);
   }
 
+  private lastHudKey = "";
+
   private emit() {
-    this.ev.onHud({
-      score: Math.round(this.score),
-      lives: this.lives,
-      level: this.level,
-      combo: this.combo,
-      active: (Object.keys(this.timers) as PowerKind[])
-        .filter((k) => (this.timers[k] ?? 0) > 0)
-        .map((k) => ({ kind: k, left: this.timers[k] ?? 0 })),
-    });
+    const active = (Object.keys(this.timers) as PowerKind[])
+      .filter((k) => (this.timers[k] ?? 0) > 0)
+      .map((k) => ({ kind: k, left: this.timers[k] ?? 0 }));
+    const score = Math.round(this.score);
+    const key = `${score}|${this.lives}|${this.level}|${this.combo}|${active.map((a) => `${a.kind}:${Math.ceil(a.left / 1000)}`).join(",")}`;
+    if (key === this.lastHudKey) return;
+    this.lastHudKey = key;
+    this.ev.onHud({ score, lives: this.lives, level: this.level, combo: this.combo, active });
   }
 
   /* ---------- loop ---------- */
@@ -243,7 +244,7 @@ export class MasterGame {
 
     // paddle
     const pw = this.paddleWidth();
-    this.paddle.x += (this.targetX - this.paddle.x) * Math.min(1, dt * 0.028);
+    this.paddle.x += (this.targetX - this.paddle.x) * Math.min(1, dt * 0.05);
     this.paddle.x = Math.max(pw / 2, Math.min(this.w - pw / 2, this.paddle.x));
     const py = this.paddleY();
 
@@ -351,6 +352,8 @@ export class MasterGame {
 
     // level clear
     if (this.bricks.every((b) => !b.alive || b.max === 4)) this.clearLevel();
+
+    this.emit();
   }
 
   private paddleWidth() {
@@ -369,19 +372,23 @@ export class MasterGame {
       this.burst(b.x, b.y, 6, BRICK_COLORS[4]!);
       return;
     }
+    if (!br.alive) return;
     const powerful = (this.timers.power ?? 0) > 0;
     br.hits -= powerful ? 3 : 1;
     this.shake = Math.min(8, this.shake + 2);
     if (br.hits > 0) {
       audio.play("hit");
       this.burst(b.x, b.y, 6, BRICK_COLORS[Math.min(br.hits, 3)]!);
-      this.score += 5;
+      this.score += 1;
     } else {
       br.alive = false;
+      br.hits = 0;
       audio.play("break");
       this.combo = Math.min(this.combo + 1, 12);
       this.comboTimer = 1600;
-      this.score += (30 + br.max * 20) * (1 + this.combo * 0.15);
+      // fixed, balanced award — once per destroyed brick, small combo bonus
+      const base = br.max >= 3 ? 25 : br.max === 2 ? 15 : 10;
+      this.score += base + Math.min(this.combo, 8) * 2;
       this.burst(br.x + br.w / 2, br.y + br.h / 2, 18, BRICK_COLORS[Math.min(br.max, 3)]!);
       this.ev.onAchievement("first-blood");
       if (this.score >= 5000) this.ev.onAchievement("score-5000");
@@ -455,7 +462,7 @@ export class MasterGame {
 
   private clearLevel() {
     audio.play("win");
-    this.score += 250 + this.level * 50;
+    this.score += 100 + this.level * 20;
     if (!this.lostLifeThisLevel) this.ev.onAchievement("no-loss");
     if (this.mode === "challenge") this.ev.onAchievement("challenge-win");
     this.ev.onLevelClear(this.level, this.lostLifeThisLevel);

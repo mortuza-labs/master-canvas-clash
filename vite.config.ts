@@ -32,6 +32,17 @@ export default defineConfig({
               options: { cacheName: "master-pages", networkTimeoutSeconds: 4 },
             },
             {
+              urlPattern: ({ url }: { url: URL }) =>
+                url.origin === "https://fonts.googleapis.com" ||
+                url.origin === "https://fonts.gstatic.com",
+              handler: "CacheFirst",
+              options: {
+                cacheName: "master-fonts",
+                cacheableResponse: { statuses: [0, 200] },
+                expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              },
+            },
+            {
               urlPattern: ({ sameOrigin, request }: { sameOrigin: boolean; request: Request }) =>
                 sameOrigin && ["style", "script", "image", "font"].includes(request.destination),
               handler: "CacheFirst",
