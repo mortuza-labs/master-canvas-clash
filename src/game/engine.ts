@@ -243,7 +243,7 @@ export class MasterGame {
 
     // paddle
     const pw = this.paddleWidth();
-    this.paddle.x += (this.targetX - this.paddle.x) * Math.min(1, dt * 0.028);
+    this.paddle.x += (this.targetX - this.paddle.x) * Math.min(1, dt * 0.05);
     this.paddle.x = Math.max(pw / 2, Math.min(this.w - pw / 2, this.paddle.x));
     const py = this.paddleY();
 
