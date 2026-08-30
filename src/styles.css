@@ -82,6 +82,7 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     overscroll-behavior: none;
+    overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
   }
 }
