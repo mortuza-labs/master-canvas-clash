@@ -459,7 +459,7 @@ export class MasterGame {
 
   private clearLevel() {
     audio.play("win");
-    this.score += 250 + this.level * 50;
+    this.score += 100 + this.level * 20;
     if (!this.lostLifeThisLevel) this.ev.onAchievement("no-loss");
     if (this.mode === "challenge") this.ev.onAchievement("challenge-win");
     this.ev.onLevelClear(this.level, this.lostLifeThisLevel);
