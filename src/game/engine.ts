@@ -112,8 +112,8 @@ export class MasterGame {
   }
 
   private baseSpeed() {
-    const base = this.mode === "challenge" ? 0.62 : this.mode === "endless" ? 0.5 : 0.46;
-    return (base + Math.min(this.level, 20) * 0.022) * (this.h / 700) * 1.05;
+    const base = this.mode === "challenge" ? 0.74 : this.mode === "endless" ? 0.6 : 0.56;
+    return (base + Math.min(this.level, 20) * 0.024) * (this.h / 700) * 1.05;
   }
 
   private grid(level: number): Grid {
