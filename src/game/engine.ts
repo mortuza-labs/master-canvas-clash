@@ -215,7 +215,7 @@ export class MasterGame {
       .filter((k) => (this.timers[k] ?? 0) > 0)
       .map((k) => ({ kind: k, left: this.timers[k] ?? 0 }));
     const score = Math.round(this.score);
-    const key = `${score}|${this.lives}|${this.level}|${this.combo}|${active.map((a) => a.kind).join(",")}`;
+    const key = `${score}|${this.lives}|${this.level}|${this.combo}|${active.map((a) => `${a.kind}:${Math.ceil(a.left / 1000)}`).join(",")}`;
     if (key === this.lastHudKey) return;
     this.lastHudKey = key;
     this.ev.onHud({ score, lives: this.lives, level: this.level, combo: this.combo, active });
@@ -352,6 +352,8 @@ export class MasterGame {
 
     // level clear
     if (this.bricks.every((b) => !b.alive || b.max === 4)) this.clearLevel();
+
+    this.emit();
   }
 
   private paddleWidth() {
