@@ -4,13 +4,13 @@ import { GameShell } from "@/components/game/GameShell";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "MASTER — Break. Conquer. Master." },
+      { title: "Master : Arcade" },
       {
         name: "description",
         content:
           "MASTER is a premium offline arcade brick-breaker: smooth physics, power-ups, three game modes, achievements and installable PWA play.",
       },
-      { property: "og:title", content: "MASTER — Break. Conquer. Master." },
+      { property: "og:title", content: "Master : Arcade" },
       {
         property: "og:description",
         content:
