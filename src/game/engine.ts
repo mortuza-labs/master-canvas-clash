@@ -261,6 +261,8 @@ export class MasterGame {
         b.x = this.paddle.x;
         b.y = py - this.paddle.h / 2 - b.r - 2;
       }
+      this.idleTimer += dt;
+      if (this.idleTimer >= 2000) this.launch();
     }
 
     const step = dt * slow;
