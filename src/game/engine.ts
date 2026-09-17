@@ -59,6 +59,7 @@ export class MasterGame {
   private paddle = { x: 0, w: 120, h: 14 };
   private targetX = 0;
   private launched = false;
+  private idleTimer = 0;
   private combo = 0;
   private comboTimer = 0;
   private lostLifeThisLevel = false;
@@ -174,6 +175,7 @@ export class MasterGame {
 
   private resetBall() {
     this.launched = false;
+    this.idleTimer = 0;
     this.paddle.x = this.w / 2;
     this.targetX = this.w / 2;
     const r = Math.max(6, this.w * 0.011);
@@ -259,6 +261,8 @@ export class MasterGame {
         b.x = this.paddle.x;
         b.y = py - this.paddle.h / 2 - b.r - 2;
       }
+      this.idleTimer += dt;
+      if (this.idleTimer >= 2000) this.launch();
     }
 
     const step = dt * slow;

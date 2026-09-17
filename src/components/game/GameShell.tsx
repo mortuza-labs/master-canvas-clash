@@ -97,6 +97,7 @@ export function GameShell() {
       saveRef.current.powerups,
     );
     gameRef.current = game;
+    (window as unknown as { __game?: MasterGame }).__game = game;
     const onResize = () => game.resize();
     window.addEventListener("resize", onResize);
     window.addEventListener("orientationchange", onResize);
