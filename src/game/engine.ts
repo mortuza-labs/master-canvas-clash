@@ -397,9 +397,9 @@ export class MasterGame {
       // speed up gradually
       for (const bl of this.balls) {
         const s = Math.hypot(bl.vx, bl.vy);
-        const max = this.baseSpeed() * 1.6;
+        const max = this.baseSpeed() * 1.35;
         if (s < max) {
-          const f = 1.004;
+          const f = 1.0018;
           bl.vx *= f;
           bl.vy *= f;
         }
